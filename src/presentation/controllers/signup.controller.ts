@@ -4,7 +4,7 @@ export class SignUpController {
   handle (httpRequest: HttpRequest): HttpResponse {
     return {
       statusCode: 400,
-      body: {}
+      body: new Error('Missing param: name')
     }
   }
 }
