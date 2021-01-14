@@ -1,7 +1,5 @@
-import { ServerError } from './../errors/server-error'
+import { ServerError, InvalidParamError, MissingParamError } from './../errors'
 import { EmailValidator } from './../validator/email-validator'
-import { InvalidParamError } from '../errors/invalid-param-error'
-import { MissingParamError } from './../errors/missing-param-error'
 import { SignUpController } from './signup.controller'
 
 describe('SignUp Controller', () => {

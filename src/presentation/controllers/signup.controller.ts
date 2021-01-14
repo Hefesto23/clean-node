@@ -1,9 +1,7 @@
-import { serverError } from './../errors/errors-helper'
-import { InvalidParamError } from './../errors/invalid-param-error'
+import { serverError, badRequest } from './../errors/errors-helper'
+import { InvalidParamError, MissingParamError } from './../errors'
 import { EmailValidator } from './../validator/email-validator'
 import { IController } from './controller'
-import { badRequest } from '../errors/errors-helper'
-import { MissingParamError } from '../errors/missing-param-error'
 import { HttpRequest, HttpResponse } from './../dtos/http'
 
 export class SignUpController implements IController {
