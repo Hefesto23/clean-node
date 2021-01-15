@@ -15,7 +15,7 @@ describe('SignUp Controller', () => {
   class AddAccountStub implements AddAccount {
     add (addAccountModel: AddAccountModel): AccountModel {
       return {
-        id: 'any_id',
+        id: 'valid_id',
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password'
@@ -172,10 +172,31 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
+
     jest.spyOn(addAccountStub, 'add')
       .mockImplementationOnce(() => { throw new Error('Something Wrong') })
     const httpResponse = signUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  it('should return 200 if addAcount has correct values', () => {
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+
+    const httpResponse = signUpController.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'valid_id',
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
   })
 })
