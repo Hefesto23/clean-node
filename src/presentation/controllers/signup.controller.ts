@@ -3,7 +3,7 @@ import { serverError, badRequest } from './../errors/errors-helper'
 import { InvalidParamError, MissingParamError } from './../errors'
 import { EmailValidator } from './../validator/email-validator'
 import { IController } from './controller'
-import { HttpRequest, HttpResponse } from './../dtos/http'
+import { HttpRequest, HttpResponse, successResponse } from './../dtos/http'
 
 export class SignUpController implements IController {
   private readonly emailValidator: EmailValidator
@@ -34,10 +34,7 @@ export class SignUpController implements IController {
         email,
         password
       })
-      return {
-        statusCode: 200,
-        body: account
-      }
+      return successResponse(account)
     } catch (error) {
       // this.logger(error)
       return serverError()
