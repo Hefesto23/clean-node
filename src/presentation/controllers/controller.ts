@@ -1,5 +1,5 @@
 import { HttpRequest, HttpResponse } from '../dtos/http'
 
 export interface IController {
-  handle: (httpRequest: HttpRequest) => HttpResponse
+  handle: (httpRequest: HttpRequest) => Promise<HttpResponse>
 }
