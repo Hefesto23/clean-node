@@ -1,3 +1,5 @@
+import { AccountModel } from '../../domain/usecases/models/account'
+import { AddAccount, AddAccountModel } from './../../domain/usecases/add-account'
 import { ServerError, InvalidParamError, MissingParamError } from './../errors'
 import { EmailValidator } from './../validator/email-validator'
 import { SignUpController } from './signup.controller'
@@ -9,10 +11,22 @@ describe('SignUp Controller', () => {
       return true
     }
   }
+
+  class AddAccountStub implements AddAccount {
+    add (addAccountModel: AddAccountModel): AccountModel {
+      return {
+        id: 'any_id',
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+    }
+  }
   const emailValidatorStub = new EmailValidatorStub()
+  const addAccountStub = new AddAccountStub()
 
   beforeEach(() => {
-    signUpController = new SignUpController(emailValidatorStub)
+    signUpController = new SignUpController(emailValidatorStub, addAccountStub)
   })
 
   it('should return 400 if no name is provided', () => {
@@ -129,5 +143,23 @@ describe('SignUp Controller', () => {
     const httpResponse = signUpController.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  it('should call addAcount with correct values', () => {
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const spyAdd = jest.spyOn(addAccountStub, 'add')
+    signUpController.handle(httpRequest)
+    expect(spyAdd).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
   })
 })
