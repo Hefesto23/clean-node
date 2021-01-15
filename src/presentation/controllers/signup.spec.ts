@@ -1,4 +1,4 @@
-import { AccountModel } from '../../domain/usecases/models/account'
+import { AccountModel } from '../../domain/models/account'
 import { AddAccount, AddAccountModel } from './../../domain/usecases/add-account'
 import { ServerError, InvalidParamError, MissingParamError } from './../errors'
 import { EmailValidator } from './../validator/email-validator'
