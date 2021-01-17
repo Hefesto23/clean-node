@@ -67,4 +67,32 @@ describe('DbAddAccount Usecase', () => {
     accountData.password = 'hashed_value'
     expect(addSpy).toHaveBeenCalledWith(accountData)
   })
+
+  it('should throw addAccountRepository error', async () => {
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    }
+    jest
+      .spyOn(addAccountRepositoryStub, 'add')
+      .mockRejectedValueOnce(new Error('addAccountRepository error'))
+    const promiseError = dbAddAccount.add(accountData)
+    await expect(promiseError).rejects.toThrowError('addAccountRepository error')
+  })
+
+  it('should return expected value', async () => {
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    }
+    const newAccount = await dbAddAccount.add(accountData)
+    expect(newAccount).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'hashed_value'
+    })
+  })
 })
