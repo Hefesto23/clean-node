@@ -25,4 +25,17 @@ describe('DbAddAccount Usecase', () => {
     await dbAddAccount.add(accountData)
     expect(encSpy).toHaveBeenCalledWith('valid_password')
   })
+
+  it('should throw encrypter error', async () => {
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    }
+    jest
+      .spyOn(encrypterStub, 'encrypt')
+      .mockRejectedValueOnce(new Error('encrypter error'))
+    const promiseError = dbAddAccount.add(accountData)
+    await expect(promiseError).rejects.toThrowError('encrypter error')
+  })
 })
