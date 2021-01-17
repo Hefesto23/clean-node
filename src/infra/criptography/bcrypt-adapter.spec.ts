@@ -8,11 +8,11 @@ jest.mock('bcrypt', () => ({
 }))
 
 describe('Bcrypt Adapter', () => {
+  const BCRYPT_SALT = 12
   let bcryptAdapter: BcryptAdapter
 
   beforeEach(() => {
-    const salt = 12
-    bcryptAdapter = new BcryptAdapter(salt)
+    bcryptAdapter = new BcryptAdapter(BCRYPT_SALT)
   })
 
   it('should call bcrypt with correct value', async () => {
@@ -24,5 +24,11 @@ describe('Bcrypt Adapter', () => {
   it('should return one hash on success', async () => {
     const encryptedValue = await bcryptAdapter.encrypt('any_value')
     expect(encryptedValue).toBe('hashed_value')
+  })
+
+  it('should throw bcrypt error', async () => {
+    jest.spyOn(bcrypt, 'hash').mockRejectedValueOnce(new Error('Bcrypt Error'))
+    const encryptedValue = bcryptAdapter.encrypt('any_value')
+    await expect(encryptedValue).rejects.toThrowError('Bcrypt Error')
   })
 })
