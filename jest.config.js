@@ -14,5 +14,7 @@ module.exports = {
   transform: {
     '.+\\.ts$': 'ts-jest'
   },
+  // jest MongoDB provides all required configuration to run your tests using MongoDB.
+  preset: "@shelf/jest-mongodb"
 
 };
